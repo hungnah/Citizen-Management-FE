@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Building, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { apiPost } from '@/lib/api'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -41,28 +42,16 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password
-        }),
+      await apiPost('/api/auth/register', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success('Đăng ký thành công! Vui lòng đăng nhập.')
-        router.push('/login')
-      } else {
-        toast.error(data.message || 'Đăng ký thất bại!')
-      }
-    } catch (error) {
-      toast.error('Có lỗi xảy ra, vui lòng thử lại!')
+      toast.success('Đăng ký thành công! Vui lòng đăng nhập.')
+      router.push('/login')
+    } catch (error: any) {
+      toast.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại!')
     } finally {
       setLoading(false)
     }

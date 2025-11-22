@@ -16,6 +16,7 @@ import {
   Bell
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { apiGet, apiPost } from '@/lib/api'
 
 interface User {
   id: string
@@ -39,18 +40,9 @@ export default function DashboardLayout({
     const fetchUser = async () => {
       try {
         console.log('Fetching user info...')
-        const response = await fetch('/api/auth/me', {
-          credentials: 'include'
-        })
-        
-        if (response.ok) {
-          const userData = await response.json()
-          console.log('User data received:', userData)
-          setUser(userData)
-        } else {
-          console.log('Failed to get user info, redirecting to login')
-          router.push('/login')
-        }
+        const userData = await apiGet<User>('/api/auth/me')
+        console.log('User data received:', userData)
+        setUser(userData)
       } catch (error) {
         console.log('Error fetching user info:', error)
         router.push('/login')
@@ -62,7 +54,7 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
+      await apiPost('/api/auth/logout')
       toast.success('Đăng xuất thành công!')
       router.push('/')
     } catch (error) {

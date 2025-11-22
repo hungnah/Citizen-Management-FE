@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Building, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { apiPost } from '@/lib/api'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -18,28 +19,16 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      })
+      await apiPost('/api/auth/login', { email, password })
 
-      const data = await response.json()
-
-      if (response.ok) {
-        toast.success('Đăng nhập thành công!')
-        console.log('Login successful, redirecting to dashboard...')
-        // Use window.location for more reliable redirect
-        setTimeout(() => {
-          window.location.href = '/dashboard'
-        }, 1000)
-      } else {
-        toast.error(data.message || 'Đăng nhập thất bại!')
-      }
-    } catch (error) {
-      toast.error('Có lỗi xảy ra, vui lòng thử lại!')
+      toast.success('Đăng nhập thành công!')
+      console.log('Login successful, redirecting to dashboard...')
+      // Use window.location for more reliable redirect
+      setTimeout(() => {
+        window.location.href = '/dashboard'
+      }, 1000)
+    } catch (error: any) {
+      toast.error(error.message || 'Có lỗi xảy ra, vui lòng thử lại!')
     } finally {
       setLoading(false)
     }
