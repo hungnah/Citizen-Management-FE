@@ -31,8 +31,8 @@ Frontend application cho hệ thống quản lý nhân khẩu và nhà văn hóa
 ### Bước 1: Clone repository
 
 ```bash
-git clone <frontend-repo-url>
-cd citizen-management-frontend
+git clone https://github.com/hungnah/Citizen-Management-FE
+cd Citizen-Management-FE
 ```
 
 ### Bước 2: Cài đặt dependencies
